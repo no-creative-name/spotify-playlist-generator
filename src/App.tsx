@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Route, Redirect, Switch, RouteComponentProps } from 'react-router-dom';
 import './App.css';
+import PlaylistGenerator from './components/PlaylistGenerator';
+import LoginScreen from './components/LoginScreen';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Route exact path="/login" component={LoginScreen} />
+      <Route exact path="/generate" component={PlaylistGenerator} />
+      <Route exact path="/" render={redirectToGenerator} />
+    </BrowserRouter>
   );
+}
+
+const getHashParams = (): {[key: string]: string} => {
+  const hashParams: {[key: string]: string} = {};
+  let e, r = /([^&;=]+)=?([^&;]*)/g,
+    q = window.location.hash.substring(1);
+    e = r.exec(q)
+  while (e) {
+    hashParams[e[1]] = decodeURIComponent(e[2]);
+    e = r.exec(q);
+  }
+  return hashParams;
+}
+
+const redirectToGenerator = () => {
+  const {access_token} = getHashParams();
+  const redirectLink = `/generate#${access_token}`;
+  
+  return (<Redirect to={redirectLink} />)
 }
 
 export default App;
