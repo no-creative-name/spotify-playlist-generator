@@ -9,6 +9,7 @@ const FormSet = styled.div`
     display: flex;
     flex-direction: column;
     width: 30%;
+    transition: opacity 0.3s;
 `;
 
 const Checkbox = styled.input`
@@ -37,6 +38,7 @@ export interface PlaylistFormData {
     startBpm?: number;
     endBpm?: number;
     danceability?: number;
+    energy?: number;
     numberOfTracks: number;
 }
 
@@ -51,6 +53,8 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
     const [endBpm, setEndBpm] = useState(120);
     const [danceabilityToggle, setDanceabilityToggle] = useState(false);
     const [danceability, setDanceability] = useState(0.5);
+    const [energyToggle, setEnergyToggle] = useState(false);
+    const [energy, setEnergy] = useState(0.5);
 
     const onPlaylistNameInput = useCallback(({ target }) => {
         setPlaylistName(target.value);
@@ -80,6 +84,10 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
         setDanceability(target.value);
     }, []);
 
+    const onEnergyInput = useCallback(({ target }) => {
+        setEnergy(target.value);
+    }, []);
+
     const onBpmToggle = useCallback(({ target }) => {
         setBpmToggle(target.checked);
     }, []);
@@ -91,6 +99,10 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
     const onDanceabilityToggle = useCallback(({ target }) => {
         setDanceabilityToggle(target.checked);
     }, []);
+    
+    const onEnergyToggle = useCallback(({ target }) => {
+        setEnergyToggle(target.checked);
+    }, []);
 
     const onButtonClick = () => {
         onSubmitForm({
@@ -101,6 +113,7 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
             endYear: yearToggle ? endYear : undefined,
             numberOfTracks,
             danceability: danceabilityToggle ? danceability / 100 : undefined,
+            energy: energyToggle ? energy / 100 : undefined,
         })
     }
 
@@ -132,6 +145,11 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
                 <Checkbox type="checkbox" checked={danceabilityToggle} onChange={onDanceabilityToggle}></Checkbox>
                 <Label htmlFor="danceability">Danceability</Label>
                 <Input disabled={!danceabilityToggle} name="danceability" type="range" value={danceability} onChange={onDanceabilityInput}></Input>
+            </FormSet>
+            <FormSet className={energyToggle ? '' : 'disabled'}>
+                <Checkbox type="checkbox" checked={energyToggle} onChange={onEnergyToggle}></Checkbox>
+                <Label htmlFor="energy">Energy</Label>
+                <Input disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></Input>
             </FormSet>
             <Button onClick={onButtonClick}>Create Playlist</Button>
         </React.Fragment>

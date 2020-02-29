@@ -43,17 +43,9 @@ const PlaylistGenerator: React.FC = () => {
         });
     }
 
-    const initiatePlaylistGeneration = async ({ 
-        numberOfTracks,
-        startYear,
-        endYear,
-        startBpm,
-        endBpm,
-        playlistName,
-        danceability
-    }: PlaylistFormData) => {
+    const initiatePlaylistGeneration = async (playlistFormData: PlaylistFormData) => {
         const limitPerFetch = 50;
-        const numberOfFetches = numberOfTracks / limitPerFetch;
+        const numberOfFetches = playlistFormData.numberOfTracks / limitPerFetch;
         const fetchPromises = [];
 
         if (spotifyApi) {
@@ -95,18 +87,12 @@ const PlaylistGenerator: React.FC = () => {
             });
 
             const filteredTracks = filterTracks(extendedTracks,
-                {
-                    startYear,
-                    endYear,
-                    startBpm,
-                    endBpm,
-                    danceability
-                }
+                playlistFormData
             );
                 
             if(filteredTracks.length > 0) {
                 setError('');
-                await createPlaylist(playlistName, filteredTracks.map(t => t.track.uri));
+                await createPlaylist(playlistFormData.playlistName, filteredTracks.map(t => t.track.uri));
             } else {
                 setError('Sorry, there are no tracks that fit these conditions. Please try again.');
             }
@@ -124,7 +110,8 @@ const PlaylistGenerator: React.FC = () => {
             endYear?: number,
             startBpm?: number,
             endBpm?: number,
-            danceability?: number
+            danceability?: number,
+            energy?: number,
         }
     ) => {
         return tracks.filter(t => {
@@ -132,12 +119,14 @@ const PlaylistGenerator: React.FC = () => {
             const releaseYear = Number(releaseDate.substr(0, 4));
             const bpm = t.audioFeatures.tempo;
             const danceability = t.audioFeatures.danceability;
+            const energy = t.audioFeatures.energy;
             
             return releaseYear >= (filters.startYear || 0) &&
                 releaseYear <= (filters.endYear || 10000) &&
                 bpm >= (filters.startBpm || 0) &&
                 bpm <= (filters.endBpm || 10000) &&
-                danceability >= (filters.danceability || 0.0);
+                danceability >= (filters.danceability || 0.0),
+                energy >= (filters.energy || 0.0);
         })
     }
 
