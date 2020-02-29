@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
-import ConfigurationForm, { PlaylistFormData } from './ConfigurationForm';
+import ConfigurationForm, { PlaylistFormData, Button } from './ConfigurationForm';
 
 const Container = styled.div`
     display: flex;
@@ -38,9 +38,7 @@ const PlaylistGenerator: React.FC = () => {
     }, []);
 
     const onSubmitForm = (formData: PlaylistFormData) => {
-        initiatePlaylistGeneration(formData).catch(e => {
-            console.log(e);
-        });
+        initiatePlaylistGeneration(formData);
     }
 
     const initiatePlaylistGeneration = async (playlistFormData: PlaylistFormData) => {
@@ -89,8 +87,8 @@ const PlaylistGenerator: React.FC = () => {
             const filteredTracks = filterTracks(extendedTracks,
                 playlistFormData
             );
-                
-            if(filteredTracks.length > 0) {
+
+            if (filteredTracks.length > 0) {
                 setError('');
                 await createPlaylist(playlistFormData.playlistName, filteredTracks.map(t => t.track.uri));
             } else {
@@ -113,22 +111,20 @@ const PlaylistGenerator: React.FC = () => {
             danceability?: number,
             energy?: number,
         }
-    ) => {
-        return tracks.filter(t => {
-            const releaseDate = (t.track.album as SpotifyApi.AlbumObjectFull)['release_date'];
-            const releaseYear = Number(releaseDate.substr(0, 4));
-            const bpm = t.audioFeatures.tempo;
-            const danceability = t.audioFeatures.danceability;
-            const energy = t.audioFeatures.energy;
-            
-            return releaseYear >= (filters.startYear || 0) &&
-                releaseYear <= (filters.endYear || 10000) &&
-                bpm >= (filters.startBpm || 0) &&
-                bpm <= (filters.endBpm || 10000) &&
-                danceability >= (filters.danceability || 0.0),
-                energy >= (filters.energy || 0.0);
-        })
-    }
+    ) => tracks.filter(t => {
+        const releaseDate = (t.track.album as SpotifyApi.AlbumObjectFull)['release_date'];
+        const releaseYear = Number(releaseDate.substr(0, 4));
+        const bpm = t.audioFeatures.tempo;
+        const danceability = t.audioFeatures.danceability;
+        const energy = t.audioFeatures.energy;
+
+        return releaseYear >= (filters.startYear || 0) &&
+            releaseYear <= (filters.endYear || 10000) &&
+            bpm >= (filters.startBpm || 0) &&
+            bpm <= (filters.endBpm || 10000) &&
+            danceability >= (filters.danceability || 0.0) &&
+            energy >= (filters.energy || 0.0);
+    });
 
     const createPlaylist = async (name: string, trackUris: string[]) => {
         const me = await spotifyApi.getMe();
@@ -137,7 +133,7 @@ const PlaylistGenerator: React.FC = () => {
         });
         let lastIdx = 0;
         trackUris.forEach((uri, idx) => {
-            if(idx !== 0 && (idx % 100 === 0 || idx === trackUris.length - 1)) {
+            if (idx !== 0 && (idx % 100 === 0 || idx === trackUris.length - 1)) {
                 spotifyApi.addTracksToPlaylist(playlistResponse.id, trackUris.slice(lastIdx, idx));
                 lastIdx = idx;
             }

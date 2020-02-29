@@ -109,8 +109,8 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
             playlistName,
             startBpm: bpmToggle ? startBpm : undefined,
             endBpm: bpmToggle ? endBpm : undefined,
-            startYear: yearToggle ? startYear : undefined,
-            endYear: yearToggle ? endYear : undefined,
+            startYear: yearToggle ? Number(startYear) : undefined,
+            endYear: yearToggle ? Number(endYear) : undefined,
             numberOfTracks,
             danceability: danceabilityToggle ? danceability / 100 : undefined,
             energy: energyToggle ? energy / 100 : undefined,
@@ -151,7 +151,7 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
                 <Label htmlFor="energy">Energy</Label>
                 <Input disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></Input>
             </FormSet>
-            <Button onClick={onButtonClick}>Create Playlist</Button>
+            <Button onClick={onButtonClick}>Get Playlist</Button>
         </React.Fragment>
     )
 }
