@@ -26,6 +26,12 @@ const getHashParams = (): {[key: string]: string} => {
   return hashParams;
 }
 
+const redirectToLogin = () => {
+  const redirectLink = `/login`;
+  
+  return (<Redirect to={redirectLink} />)
+}
+
 const redirectToGenerator = () => {
   const {access_token} = getHashParams();
   const redirectLink = `/generate#${access_token}`;

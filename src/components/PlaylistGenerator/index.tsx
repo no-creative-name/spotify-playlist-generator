@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
 import ConfigurationForm, { PlaylistFormData } from './ConfigurationForm';
-import { Button } from '../Button';
 import PlaylistPreview from './PlaylistPreview';
 
 const Container = styled.div`

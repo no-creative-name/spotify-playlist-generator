@@ -5,4 +5,9 @@ export const Button = styled.button`
     font-size: 18px;
     border-radius: 5px;
     width: 100%;
+    transition: background-color 0.1s;
+
+    &:active {
+        background-color: lightgrey;
+    }
 `;

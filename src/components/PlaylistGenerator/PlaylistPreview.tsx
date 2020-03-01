@@ -1,5 +1,5 @@
 import { PlaylistPlan } from './';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from '../Button';
 
@@ -48,33 +48,46 @@ interface ChildComponentProps {
 const NUMBER_OF_PREVIEW_TRACKS = 8;
 
 const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlaylistCreate }) => {
+    const [notification, setNotification] = useState('');
+
+    useEffect(() => {
+        setNotification('')
+    }, [playlistData]);
+
     const onButtonClick = () => {
         onPlaylistCreate();
+        setNotification(`Great! Your playlist ${playlistData.name} has been created. Check it out in your Spotify client! 🥳`)
     }
 
     return (
         <Container>
-            <h2>{playlistData.name}</h2>
-            <List>
-                {playlistData.trackInfos.map((t, idx) => {
-                    if (idx <= NUMBER_OF_PREVIEW_TRACKS) {
-                        return (
-                            <ListItem key={t.track.id}>
-                                <Artist>
-                                    {t.track.artists[0].name}
-                                </Artist>
-                                <Title>
-                                    {t.track.name}
-                                </Title>
-                            </ListItem>
-                        );
-                    }
-                    if (idx === NUMBER_OF_PREVIEW_TRACKS + 1) {
-                        return (<ListItem key="more">...</ListItem>);
-                    }
-                })}
-            </List>
-            <Button onClick={onButtonClick}>Create Playlist</Button>
+            {
+                notification ? (<div>{notification}</div>) : (
+                    <React.Fragment>
+                        <h2>{playlistData.name}</h2>
+                        <List>
+                            {playlistData.trackInfos.map((t, idx) => {
+                                if (idx <= NUMBER_OF_PREVIEW_TRACKS) {
+                                    return (
+                                        <ListItem key={t.track.id}>
+                                            <Artist>
+                                                {t.track.artists[0].name}
+                                            </Artist>
+                                            <Title>
+                                                {t.track.name}
+                                            </Title>
+                                        </ListItem>
+                                    );
+                                }
+                                if (idx === NUMBER_OF_PREVIEW_TRACKS + 1) {
+                                    return (<ListItem key="more">...</ListItem>);
+                                }
+                            })}
+                        </List>
+                        <Button onClick={onButtonClick}>Create Playlist</Button>
+                    </React.Fragment>
+               )
+            }
         </Container>
     )
 }
