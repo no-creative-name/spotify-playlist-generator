@@ -67,19 +67,33 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
 
     const onStartBpmInput = useCallback(({ target }) => {
         setStartBpm(target.value);
-    }, []);
+        if(endBpm < target.value) {
+            setEndBpm(target.value);
+        }
+    }, [endBpm]);
 
     const onEndBpmInput = useCallback(({ target }) => {
         setEndBpm(target.value);
-    }, []);
+        if(startBpm > target.value) {
+            setStartBpm(target.value);
+        }
+    }, [startBpm]);
 
     const onStartYearInput = useCallback(({ target }) => {
         setStartYear(target.value);
-    }, []);
+        
+        if(target.value.length === 4 && endYear < target.value) {
+            setEndYear(target.value);
+        }
+    }, [endYear]);
 
     const onEndYearInput = useCallback(({ target }) => {
         setEndYear(target.value);
-    }, []);
+        
+        if(target.value.length === 4 && startYear > target.value) {
+            setStartYear(target.value);
+        }
+    }, [startYear]);
 
     const onNumberInput = useCallback(({ target }) => {
         setNumberOfTracks(target.value);

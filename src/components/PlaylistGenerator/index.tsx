@@ -124,7 +124,7 @@ const PlaylistGenerator: React.FC = () => {
     ) => tracks.filter(t => {
         const releaseDate = (t.track.album as SpotifyApi.AlbumObjectFull)['release_date'];
         const releaseYear = Number(releaseDate.substr(0, 4));
-        const bpm = t.audioFeatures.tempo;
+        const bpm = t.audioFeatures.tempo > 200 ? t.audioFeatures.tempo / 2 : t.audioFeatures.tempo;
         const danceability = t.audioFeatures.danceability;
         const energy = t.audioFeatures.energy;
 
