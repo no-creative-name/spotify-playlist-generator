@@ -4,17 +4,15 @@ import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
 import ConfigurationForm, { PlaylistFormData } from './ConfigurationForm';
 import { Button } from '../Button';
+import PlaylistPreview from './PlaylistPreview';
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 50% 50%;
     width: 80vw;
-    height: 100vh;
     margin: 0 auto;
-    background-color: lightgrey;
+    padding: 20px 0;
+    font-family: Helvetica;
 `;
 
 const Error = styled.div`
@@ -28,9 +26,10 @@ interface ExtendedTrackObject {
     track: SpotifyApi.TrackObjectFull;
 }
 
-interface PlaylistPlan {
+export interface PlaylistPlan {
     name: string;
     trackUris: string[];
+    trackInfos: ExtendedTrackObject[];
 }
 
 const PlaylistGenerator: React.FC = () => {
@@ -39,6 +38,7 @@ const PlaylistGenerator: React.FC = () => {
     const [playlistPlan, setPlaylistPlan] = useState<PlaylistPlan>({
         name: '',
         trackUris: [],
+        trackInfos: [],
     });
 
     useEffect(() => {
@@ -98,6 +98,7 @@ const PlaylistGenerator: React.FC = () => {
                 setError('');
                 setPlaylistPlan({
                     name: playlistFormData.playlistName,
+                    trackInfos: filteredTracks,
                     trackUris: filteredTracks.map(t => t.track.uri)
                 });
                 
@@ -153,7 +154,7 @@ const PlaylistGenerator: React.FC = () => {
     return (
         <Container>
             <ConfigurationForm onSubmitForm={getFilteredTracks} />
-            <Button onClick={createPlaylist}>Create Playlist</Button>
+            <PlaylistPreview playlistData={playlistPlan} onPlaylistCreate={createPlaylist}/>
             {error ? <Error>{error}</Error> : ''}
         </Container>
     )

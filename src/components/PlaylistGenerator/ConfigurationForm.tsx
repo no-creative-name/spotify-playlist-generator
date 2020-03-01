@@ -2,6 +2,13 @@ import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent }
 import styled from 'styled-components';
 import { Button } from '../Button';
 
+const Container = styled.div`
+    padding: 20px 50px 20px 20px;
+    border-radius: 5px;
+    background-color: lightgreen;
+    margin: 10px;
+`;
+
 const Label = styled.label`
     font-size: 16px;
 `;
@@ -9,7 +16,7 @@ const Label = styled.label`
 const FormSet = styled.div`
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 100%;
     transition: opacity 0.3s;
 `;
 
@@ -20,6 +27,9 @@ const Checkbox = styled.input`
 const Input = styled.input`
     margin: 5px 0 15px 0;
     font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
 `;
 
 interface ChildComponentProps {
@@ -113,7 +123,8 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
     }
 
     return (
-        <React.Fragment>
+        <Container>
+            <h2>Configuration</h2>
             <FormSet>
                 <Label htmlFor="playlistName">Name of playlist</Label>
                 <Input name="playlistName" type="text" value={playlistName} onChange={onPlaylistNameInput}></Input>
@@ -147,7 +158,7 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
                 <Input disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></Input>
             </FormSet>
             <Button onClick={onButtonClick}>Get Playlist</Button>
-        </React.Fragment>
+        </Container>
     )
 }
 
