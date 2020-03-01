@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent } from 'react';
 import styled from 'styled-components';
+import { Button } from '../Button';
 
 const Label = styled.label`
     font-size: 16px;
@@ -20,12 +21,6 @@ const Input = styled.input`
     margin: 5px 0 15px 0;
     font-size: 18px;
 `;
-
-const Button = styled.button`
-    margin-top: 15px;
-    font-size: 18px;
-`;
-
 
 interface ChildComponentProps {
     onSubmitForm: ({ }: PlaylistFormData) => void;

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
-import ConfigurationForm, { PlaylistFormData, Button } from './ConfigurationForm';
+import ConfigurationForm, { PlaylistFormData } from './ConfigurationForm';
+import { Button } from '../Button';
 
 const Container = styled.div`
     display: flex;
@@ -27,9 +28,18 @@ interface ExtendedTrackObject {
     track: SpotifyApi.TrackObjectFull;
 }
 
+interface PlaylistPlan {
+    name: string;
+    trackUris: string[];
+}
+
 const PlaylistGenerator: React.FC = () => {
     const [spotifyApi, setSpotifyApi] = useState<SpotifyWebApi.SpotifyWebApiJs>(new SpotifyWebApi());
     const [error, setError] = useState('');
+    const [playlistPlan, setPlaylistPlan] = useState<PlaylistPlan>({
+        name: '',
+        trackUris: [],
+    });
 
     useEffect(() => {
         const accessToken = window.location.hash.substr(1);
@@ -37,11 +47,7 @@ const PlaylistGenerator: React.FC = () => {
         setSpotifyApi(getSpotifyApi(accessToken));
     }, []);
 
-    const onSubmitForm = (formData: PlaylistFormData) => {
-        initiatePlaylistGeneration(formData);
-    }
-
-    const initiatePlaylistGeneration = async (playlistFormData: PlaylistFormData) => {
+    const getFilteredTracks = async (playlistFormData: PlaylistFormData) => {
         const limitPerFetch = 50;
         const numberOfFetches = playlistFormData.numberOfTracks / limitPerFetch;
         const fetchPromises = [];
@@ -90,7 +96,11 @@ const PlaylistGenerator: React.FC = () => {
 
             if (filteredTracks.length > 0) {
                 setError('');
-                await createPlaylist(playlistFormData.playlistName, filteredTracks.map(t => t.track.uri));
+                setPlaylistPlan({
+                    name: playlistFormData.playlistName,
+                    trackUris: filteredTracks.map(t => t.track.uri)
+                });
+                
             } else {
                 setError('Sorry, there are no tracks that fit these conditions. Please try again.');
             }
@@ -126,15 +136,15 @@ const PlaylistGenerator: React.FC = () => {
             energy >= (filters.energy || 0.0);
     });
 
-    const createPlaylist = async (name: string, trackUris: string[]) => {
+    const createPlaylist = async () => {
         const me = await spotifyApi.getMe();
         const playlistResponse = await spotifyApi.createPlaylist(me.id, {
-            name,
+            name: playlistPlan.name,
         });
         let lastIdx = 0;
-        trackUris.forEach((uri, idx) => {
-            if (idx !== 0 && (idx % 100 === 0 || idx === trackUris.length - 1)) {
-                spotifyApi.addTracksToPlaylist(playlistResponse.id, trackUris.slice(lastIdx, idx));
+        playlistPlan.trackUris.forEach((uri, idx) => {
+            if (idx !== 0 && (idx % 100 === 0 || idx === playlistPlan.trackUris.length - 1)) {
+                spotifyApi.addTracksToPlaylist(playlistResponse.id, playlistPlan.trackUris.slice(lastIdx, idx));
                 lastIdx = idx;
             }
         });
@@ -142,7 +152,8 @@ const PlaylistGenerator: React.FC = () => {
 
     return (
         <Container>
-            <ConfigurationForm onSubmitForm={onSubmitForm} />
+            <ConfigurationForm onSubmitForm={getFilteredTracks} />
+            <Button onClick={createPlaylist}>Create Playlist</Button>
             {error ? <Error>{error}</Error> : ''}
         </Container>
     )
