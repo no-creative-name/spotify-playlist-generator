@@ -24,12 +24,14 @@ const ListItem = styled.li`
 const Artist = styled.p`
     font-size: 16px;
     margin: 0;
+    color: black;
 `;
 
 const Title = styled.p`
     font-size: 16px;
     font-weight: bold;
     margin: 5px 0 0 0;
+    color: black;
 `;
 
 interface ChildComponentProps {
