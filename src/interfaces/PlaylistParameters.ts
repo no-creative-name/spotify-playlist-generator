@@ -6,5 +6,6 @@ export interface PlaylistParameters {
     endBpm?: number;
     danceability?: number;
     energy?: number;
+    valence?: number;
     numberOfTracks: number;
 }

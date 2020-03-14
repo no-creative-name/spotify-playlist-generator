@@ -115,6 +115,7 @@ const PlaylistGenerator: React.FC = () => {
             endBpm?: number,
             danceability?: number,
             energy?: number,
+            valence?: number,
         }
     ) => tracks.filter(t => {
         const releaseDate = (t.track.album as SpotifyApi.AlbumObjectFull)['release_date'];
@@ -122,13 +123,15 @@ const PlaylistGenerator: React.FC = () => {
         const bpm = t.audioFeatures.tempo > 200 ? t.audioFeatures.tempo / 2 : t.audioFeatures.tempo;
         const danceability = t.audioFeatures.danceability;
         const energy = t.audioFeatures.energy;
+        const valence = t.audioFeatures.valence;
 
         return releaseYear >= (filters.startYear || 0) &&
             releaseYear <= (filters.endYear || 10000) &&
             bpm >= (filters.startBpm || 0) &&
             bpm <= (filters.endBpm || 10000) &&
             danceability >= (filters.danceability || 0.0) &&
-            energy >= (filters.energy || 0.0);
+            energy >= (filters.energy || 0.0) &&
+            valence >= (filters.valence || 0.0);
     });
 
     return (

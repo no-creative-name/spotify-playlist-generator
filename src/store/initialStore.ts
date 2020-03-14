@@ -13,6 +13,8 @@ export const initialStore = {
       danceability: 0.5,
       energyToggle: false,
       energy: 0.5,
+      valenceToggle: false,
+      valence: 0.5,
     },
     playlistPlan: {
       name: '',
