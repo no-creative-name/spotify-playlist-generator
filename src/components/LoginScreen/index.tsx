@@ -9,7 +9,7 @@ const LoginScreen: React.FC = () => {
             <h2>Welcome to listify!</h2>
             <p>listify allows you to create Spotify playlists based on different parameters.</p>
             <p>To start, connect listify to your Spotify account:</p>
-            <a href="http://localhost:8888/login">
+            <a href="http://schwarzfisch:8888/login">
                 <Button>Login to Spotify</Button>
             </a>
         </Box>

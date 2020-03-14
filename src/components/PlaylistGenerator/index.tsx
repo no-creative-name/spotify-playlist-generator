@@ -97,7 +97,7 @@ const PlaylistGenerator: React.FC = () => {
                 }
             } else {
                 setLoading(false);
-                setError(`You don't seem to have ${playlistFormData.numberOfTracks} tracks in your library. Please lower the number of template tracks.`)
+                setError(`You don't seem to have ${playlistFormData.numberOfTracks} tracks in your library. Please lower the number of tracks to consider.`)
             }
         }
     }

@@ -6,7 +6,9 @@ export const Button = styled.button`
     margin-top: 15px;
     font-size: 18px;
     font-weight: 500;
+    border: 0px;
     border-radius: 5px;
+    background-color: white;
     transition: background-color 0.1s;
 
     &:active {
@@ -20,7 +22,9 @@ export const SmallButton = styled.button`
     margin-top: 15px;
     font-size: 16px;
     font-weight: 500;
+    border: 0px;
     border-radius: 5px;
+    background-color: white;
     transition: background-color 0.1s;
 
     &:active {

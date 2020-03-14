@@ -22,11 +22,18 @@ const FormSet = styled.div`
 `;
 
 const Input = styled.input`
-    margin: 5px 0 15px 0;
     font-size: 18px;
     border-radius: 5px;
     border: none;
-    padding: 5px;
+    padding: 15px;
+    margin: 5px 0 15px 0px;
+`;
+
+const SliderInput = styled.input`
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    padding: 15px;
 `;
 
 interface ChildComponentProps {
@@ -50,6 +57,10 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
     const [danceability, setDanceability] = useState(playlistConfigurationParameters.danceability);
     const [energyToggle, setEnergyToggle] = useState(playlistConfigurationParameters.energyToggle);
     const [energy, setEnergy] = useState(playlistConfigurationParameters.energy);
+
+    const onInputClick = useCallback(({ target }) => {
+        target.select();
+    }, []);
 
     const onPlaylistNameInput = useCallback(({ target }) => {
         setPlaylistName(target.value);
@@ -145,33 +156,33 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
             <h2>Configuration</h2>
             <FormSet>
                 <Label htmlFor="playlistName">Name of playlist</Label>
-                <Input autoFocus name="playlistName" type="text" value={playlistName} onChange={onPlaylistNameInput}></Input>
-                <Label htmlFor="numberOfTemplateTracks">Number of template tracks</Label>
-                <Input name="numberOfTemplateTracks" type="number" value={numberOfTracks} onChange={onNumberInput}></Input>
+                <Input name="playlistName" type="text" value={playlistName} onClick={onInputClick} onChange={onPlaylistNameInput}></Input>
+                <Label htmlFor="numberOfTemplateTracks">Number of tracks to consider</Label>
+                <Input name="numberOfTemplateTracks" type="number" value={numberOfTracks} onClick={onInputClick} onChange={onNumberInput}></Input>
             </FormSet>
-            <FormSet className={bpmToggle ? '' : 'disabled'} onClick={!bpmToggle ? () => onBpmToggle(true) : () => {}}>
-                {bpmToggle ? (<SmallButton className="disableParameterButton" onClick={() => onBpmToggle(false)}>Disable Parameter</SmallButton>) : ''}
+            <FormSet className={bpmToggle ? '' : 'disabled'} onClick={!bpmToggle ? () => onBpmToggle(true) : () => { }}>
                 <Label htmlFor="startBpm">BPM Range Start</Label>
-                <Input disabled={!bpmToggle} name="startBpm" type="number" value={startBpm} onChange={onStartBpmInput}></Input>
+                <Input disabled={!bpmToggle} name="startBpm" type="number" value={startBpm} onClick={onInputClick} onChange={onStartBpmInput}></Input>
                 <Label htmlFor="endBpm">BPM Range End</Label>
-                <Input disabled={!bpmToggle} name="endBpm" type="number" value={endBpm} onChange={onEndBpmInput}></Input>
+                <Input disabled={!bpmToggle} name="endBpm" type="number" value={endBpm} onClick={onInputClick} onChange={onEndBpmInput}></Input>
+                {bpmToggle ? (<SmallButton className="disableParameterButton" onClick={() => onBpmToggle(false)}>Disable Parameter</SmallButton>) : ''}
             </FormSet>
-            <FormSet className={yearToggle ? '' : 'disabled'} onClick={!yearToggle ? () => onYearToggle(true) : () => {}}>
-                {yearToggle ? (<SmallButton className="disableParameterButton" onClick={() => onYearToggle(false)}>Disable Parameter</SmallButton>) : ''}
+            <FormSet className={yearToggle ? '' : 'disabled'} onClick={!yearToggle ? () => onYearToggle(true) : () => { }}>
                 <Label htmlFor="startYear">Release period (start year)</Label>
-                <Input disabled={!yearToggle} name="startYear" type="number" value={startYear} onChange={onStartYearInput}></Input>
+                <Input disabled={!yearToggle} name="startYear" type="number" value={startYear} onClick={onInputClick} onChange={onStartYearInput}></Input>
                 <Label htmlFor="endYear">Release period (end year)</Label>
-                <Input disabled={!yearToggle} name="endYear" type="number" value={endYear} onChange={onEndYearInput}></Input>
+                <Input disabled={!yearToggle} name="endYear" type="number" value={endYear} onClick={onInputClick} onChange={onEndYearInput}></Input>
+                {yearToggle ? (<SmallButton className="disableParameterButton" onClick={() => onYearToggle(false)}>Disable Parameter</SmallButton>) : ''}
             </FormSet>
-            <FormSet className={danceabilityToggle ? '' : 'disabled'} onClick={!danceabilityToggle ? () => onDanceabilityToggle(true) : () => {}}>
-                {danceabilityToggle ? (<SmallButton className="disableParameterButton" onClick={() => onDanceabilityToggle(false)}>Disable Parameter</SmallButton>) : ''}
+            <FormSet className={danceabilityToggle ? '' : 'disabled'} onClick={!danceabilityToggle ? () => onDanceabilityToggle(true) : () => { }}>
                 <Label htmlFor="danceability">Danceability</Label>
-                <Input disabled={!danceabilityToggle} name="danceability" type="range" value={danceability} onChange={onDanceabilityInput}></Input>
+                <SliderInput disabled={!danceabilityToggle} name="danceability" type="range" value={danceability} onChange={onDanceabilityInput}></SliderInput>
+                {danceabilityToggle ? (<SmallButton className="disableParameterButton" onClick={() => onDanceabilityToggle(false)}>Disable Parameter</SmallButton>) : ''}
             </FormSet>
-            <FormSet className={energyToggle ? '' : 'disabled'} onClick={!energyToggle ? () => onEnergyToggle(true) : () => {}}>
-                {energyToggle ? (<SmallButton className="disableParameterButton" onClick={() => onEnergyToggle(false)}>Disable Parameter</SmallButton>) : ''}
+            <FormSet className={energyToggle ? '' : 'disabled'} onClick={!energyToggle ? () => onEnergyToggle(true) : () => { }}>
                 <Label htmlFor="energy">Energy</Label>
-                <Input disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></Input>
+                <SliderInput disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></SliderInput>
+                {energyToggle ? (<SmallButton className="disableParameterButton" onClick={() => onEnergyToggle(false)}>Disable Parameter</SmallButton>) : ''}
             </FormSet>
             <Button onClick={onButtonClick}>Get Playlist</Button>
         </Box>
