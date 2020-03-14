@@ -1,17 +1,9 @@
-import { PlaylistPlan } from './';
+import { PlaylistPlan } from '../PlaylistGenerator';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button } from '../Button';
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    overflow-x: scroll;
-    padding: 20px;
-    margin: 10px;
-    border-radius: 5px;
-    background-color: lightgreen;
-`;
+import { Button } from '../basic/Button';
+import { useHistory } from "react-router-dom";
+import { Box } from '../basic/Box';
 
 const List = styled.ul`
     display: flex;
@@ -49,18 +41,23 @@ const NUMBER_OF_PREVIEW_TRACKS = 8;
 
 const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlaylistCreate }) => {
     const [notification, setNotification] = useState('');
+    const history = useHistory();
 
     useEffect(() => {
         setNotification('')
     }, [playlistData]);
 
-    const onButtonClick = () => {
+    const onCreateClick = () => {
         onPlaylistCreate();
         setNotification(`Great! Your playlist ${playlistData.name} has been created. Check it out in your Spotify client! 🥳`)
     }
 
+    const onRedoClick = () => {
+        history.goBack();
+    }
+
     return (
-        <Container>
+        <Box>
             {
                 notification ? (<div>{notification}</div>) : (
                     <React.Fragment>
@@ -84,11 +81,12 @@ const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlayli
                                 }
                             })}
                         </List>
-                        <Button onClick={onButtonClick}>Create Playlist</Button>
+                        <Button onClick={onCreateClick}>Create Playlist</Button>
+                        <Button onClick={onRedoClick}>Readjust Parameters</Button>
                     </React.Fragment>
                )
             }
-        </Container>
+        </Box>
     )
 }
 

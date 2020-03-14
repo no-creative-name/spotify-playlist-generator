@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { Button } from '../Button';
-
-const Container = styled.div`
-    padding: 20px 50px 20px 20px;
-    border-radius: 5px;
-    background-color: lightgreen;
-    margin: 10px;
-`;
+import { Button } from '../basic/Button';
+import { Box } from '../basic/Box';
 
 const Label = styled.label`
     font-size: 16px;
@@ -21,7 +15,7 @@ const FormSet = styled.div`
 `;
 
 const Checkbox = styled.input`
-    transform: translate(-50px, 20px);
+    transform: translate(-20px, 20px);
 `
 
 const Input = styled.input`
@@ -75,7 +69,7 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
     const onEndBpmInput = useCallback(({ target }) => {
         setEndBpm(target.value);
         if(startBpm > target.value) {
-            setStartBpm(target.value);
+            //setStartBpm(target.value);
         }
     }, [startBpm]);
 
@@ -137,11 +131,11 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
     }
 
     return (
-        <Container>
+        <Box>
             <h2>Configuration</h2>
             <FormSet>
                 <Label htmlFor="playlistName">Name of playlist</Label>
-                <Input name="playlistName" type="text" value={playlistName} onChange={onPlaylistNameInput}></Input>
+                <Input autoFocus name="playlistName" type="text" value={playlistName} onChange={onPlaylistNameInput}></Input>
             </FormSet>
             <FormSet>
                 <Label htmlFor="numberOfTemplateTracks">Number of template tracks</Label>
@@ -172,7 +166,7 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
                 <Input disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></Input>
             </FormSet>
             <Button onClick={onButtonClick}>Get Playlist</Button>
-        </Container>
+        </Box>
     )
 }
 

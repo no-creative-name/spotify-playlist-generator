@@ -1,16 +1,23 @@
 import React from 'react';
 import { BrowserRouter, Route, Redirect, Switch, RouteComponentProps } from 'react-router-dom';
 import './App.css';
-import PlaylistGenerator from './components/PlaylistGenerator';
+import PlaylistGenerator, { PlaylistPlan } from './components/PlaylistGenerator';
 import LoginScreen from './components/LoginScreen';
+import PlaylistPreviewScreen from './components/PlaylistPreview/';
+import { createBrowserHistory } from 'history';
+import { Container } from './components/basic/Container';
 
 const App: React.FC = () => {
+  const history = createBrowserHistory();
   return (
-    <BrowserRouter>
-      <Route exact path="/login" component={LoginScreen} />
-      <Route exact path="/generate" component={PlaylistGenerator} />
-      <Route exact path="/" render={redirectToGenerator} />
-    </BrowserRouter>
+    <Container>
+      <BrowserRouter>
+        <Route exact path="/login" component={LoginScreen} />
+        <Route exact path="/generate" component={PlaylistGenerator}/>
+        <Route exact path="/preview" component={PlaylistPreviewScreen}/>
+        <Route exact path="/" render={redirect} />
+      </BrowserRouter>
+    </Container>
   );
 }
 
@@ -26,6 +33,13 @@ const getHashParams = (): {[key: string]: string} => {
   return hashParams;
 }
 
+const redirect = () => {
+  if(getHashParams().access_token) {
+    return redirectToGenerator();
+  }
+  return redirectToLogin();
+}
+
 const redirectToLogin = () => {
   const redirectLink = `/login`;
   
@@ -38,5 +52,6 @@ const redirectToGenerator = () => {
   
   return (<Redirect to={redirectLink} />)
 }
+
 
 export default App;

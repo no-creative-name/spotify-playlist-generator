@@ -3,16 +3,8 @@ import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
 import ConfigurationForm, { PlaylistFormData } from './ConfigurationForm';
-import PlaylistPreview from './PlaylistPreview';
-
-const Container = styled.div`
-    display: grid;
-    grid-template-columns: 50% 50%;
-    width: 80vw;
-    margin: 0 auto;
-    padding: 20px 0;
-    font-family: Helvetica;
-`;
+import { LoadingSpinner } from '../basic/LoadingSpinner';
+import { useHistory } from "react-router-dom";
 
 const Error = styled.div`
     color: red;
@@ -20,7 +12,7 @@ const Error = styled.div`
     font-weight: 600;
 `
 
-interface ExtendedTrackObject {
+export interface ExtendedTrackObject {
     audioFeatures: SpotifyApi.AudioFeaturesResponse;
     track: SpotifyApi.TrackObjectFull;
 }
@@ -39,6 +31,8 @@ const PlaylistGenerator: React.FC = () => {
         trackUris: [],
         trackInfos: [],
     });
+    const [loading, setLoading] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
         const accessToken = window.location.hash.substr(1);
@@ -47,6 +41,7 @@ const PlaylistGenerator: React.FC = () => {
     }, []);
 
     const getFilteredTracks = async (playlistFormData: PlaylistFormData) => {
+        setLoading(true);
         const limitPerFetch = 50;
         const numberOfFetches = playlistFormData.numberOfTracks / limitPerFetch;
         const fetchPromises = [];
@@ -101,7 +96,20 @@ const PlaylistGenerator: React.FC = () => {
                     trackUris: filteredTracks.map(t => t.track.uri)
                 });
                 
+                history.push({
+                    pathname: `/preview`,
+                    state: {
+                        playlistPlan: {
+                            name: playlistFormData.playlistName,
+                            trackInfos: filteredTracks,
+                            trackUris: filteredTracks.map(t => t.track.uri)
+                        },
+                        accessToken: window.location.hash.substr(1)
+                    }
+                });
+                
             } else {
+                setLoading(false);
                 setError('Sorry, there are no tracks that fit these conditions. Please try again.');
             }
         }
@@ -136,26 +144,13 @@ const PlaylistGenerator: React.FC = () => {
             energy >= (filters.energy || 0.0);
     });
 
-    const createPlaylist = async () => {
-        const me = await spotifyApi.getMe();
-        const playlistResponse = await spotifyApi.createPlaylist(me.id, {
-            name: playlistPlan.name,
-        });
-        let lastIdx = 0;
-        playlistPlan.trackUris.forEach((uri, idx) => {
-            if (idx !== 0 && (idx % 100 === 0 || idx === playlistPlan.trackUris.length - 1)) {
-                spotifyApi.addTracksToPlaylist(playlistResponse.id, playlistPlan.trackUris.slice(lastIdx, idx));
-                lastIdx = idx;
-            }
-        });
-    }
-
     return (
-        <Container>
-            <ConfigurationForm onSubmitForm={getFilteredTracks} />
-            <PlaylistPreview playlistData={playlistPlan} onPlaylistCreate={createPlaylist}/>
+        <React.Fragment>
+            {
+                loading ? (<LoadingSpinner></LoadingSpinner>) : (<ConfigurationForm onSubmitForm={getFilteredTracks} />)
+            }
             {error ? <Error>{error}</Error> : ''}
-        </Container>
+        </React.Fragment>
     )
 }
 

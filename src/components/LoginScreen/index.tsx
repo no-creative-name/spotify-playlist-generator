@@ -1,24 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Button } from '../Button';
-
-const Container = styled.div`
-    width: 80vw;
-    height: 80vh;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: lightgreen;
-    margin: 20px auto 0 auto;
-    font-family: Helvetica;
-`;
+import { Button } from '../basic/Button';
+import { CenterBox } from '../basic/CenterBox';
 
 const LoginScreen: React.FC = () => {
     return (
-        <Container>
+        <CenterBox>
+            <h1>Hi there!</h1>
+            <h2>Welcome to listify!</h2>
+            <p>listify allows you to create Spotify playlists based on different parameters.</p>
+            <p>To start, connect listify to your Spotify account:</p>
             <a href="http://localhost:8888/login">
                 <Button>Login to Spotify</Button>
             </a>
-        </Container>
+        </CenterBox>
     )
 }
 
