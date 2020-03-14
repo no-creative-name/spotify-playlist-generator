@@ -13,7 +13,6 @@ import './styles.css';
 const Label = styled.label`
     font-size: 16px;
     color: white;
-    cursor: pointer;
 `;
 
 const FormSet = styled.div`
@@ -38,7 +37,6 @@ const Input = styled.input`
     border: none;
     padding: 15px;
     margin: 5px 0 15px 0px;
-    cursor: pointer;
 `;
 
 const SliderInput = styled.input`

@@ -7,10 +7,19 @@
     cursor: inherit;
 }
 
+.disabled label {
+    cursor: pointer;
+}
+
+.disabled input {
+    cursor: pointer;
+}
+
 .disabled:hover {
     opacity: 0.8;
 }
 
 .disableParameterButton {
     margin: 20px 0 10px 0;
+    grid-column: 1 / 3;
 }
