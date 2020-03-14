@@ -56,14 +56,23 @@ const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlayli
         history.goBack();
     }
 
+    const shuffleArray = (array: any[]) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     return (
         <Box>
             {
                 notification ? (<div>{notification}</div>) : (
                     <React.Fragment>
                         <h2>{playlistData.name}</h2>
+                        <p>Number of tracks: {playlistData.trackUris.length}</p>
                         <List>
-                            {playlistData.trackInfos.map((t, idx) => {
+                            {shuffleArray(playlistData.trackInfos).map((t, idx) => {
                                 if (idx <= NUMBER_OF_PREVIEW_TRACKS) {
                                     return (
                                         <ListItem key={t.track.id}>

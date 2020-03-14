@@ -24,10 +24,8 @@ const PlaylistPreviewScreen: React.FC = () => {
     const playlistPlan = useSelector<RootState, PlaylistPlan>(state => state.playlistPlan);
     const accessToken = useSelector<RootState, string>(state => state.accessToken);
     const [spotifyApi, setSpotifyApi] = useState<SpotifyWebApi.SpotifyWebApiJs>(new SpotifyWebApi());
-    const [error, setError] = useState('');
 
     useEffect(() => {
-        console.log(accessToken);
         setSpotifyApi(getSpotifyApi(accessToken));
     }, []);
 
@@ -48,7 +46,6 @@ const PlaylistPreviewScreen: React.FC = () => {
     return (
         <React.Fragment>
             <PlaylistPreview playlistData={playlistPlan} onPlaylistCreate={createPlaylist}/>
-            {error ? <Error>{error}</Error> : ''}
         </React.Fragment>
     )
 }
