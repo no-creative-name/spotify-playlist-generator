@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
-import { ExtendedTrackObject } from '../PlaylistGenerator';
+import { ExtendedTrackObject } from '../../interfaces/ExtendedTrackObject';
 import PlaylistPreview from './PlaylistPreview';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../interfaces/RootState';
 
 const Error = styled.div`
     color: red;
@@ -18,32 +20,26 @@ export interface PlaylistPlan {
     trackInfos: ExtendedTrackObject[];
 }
 
-interface ChildComponentProps {
-    location: {
-        state: {
-            playlistPlan: PlaylistPlan;
-            accessToken: string;
-        }
-    };
-}
-
-const PlaylistPreviewScreen: React.FC<ChildComponentProps> = ({ location }) => {
+const PlaylistPreviewScreen: React.FC = () => {
+    const playlistPlan = useSelector<RootState, PlaylistPlan>(state => state.playlistPlan);
+    const accessToken = useSelector<RootState, string>(state => state.accessToken);
     const [spotifyApi, setSpotifyApi] = useState<SpotifyWebApi.SpotifyWebApiJs>(new SpotifyWebApi());
     const [error, setError] = useState('');
 
     useEffect(() => {
-        setSpotifyApi(getSpotifyApi(location.state.accessToken));
+        console.log(accessToken);
+        setSpotifyApi(getSpotifyApi(accessToken));
     }, []);
 
     const createPlaylist = async () => {
         const me = await spotifyApi.getMe();
         const playlistResponse = await spotifyApi.createPlaylist(me.id, {
-            name: location.state.playlistPlan.name,
+            name: playlistPlan.name,
         });
         let lastIdx = 0;
-        location.state.playlistPlan.trackUris.forEach((uri, idx) => {
-            if (idx !== 0 && (idx % 100 === 0 || idx === location.state.playlistPlan.trackUris.length - 1)) {
-                spotifyApi.addTracksToPlaylist(playlistResponse.id, location.state.playlistPlan.trackUris.slice(lastIdx, idx));
+        playlistPlan.trackUris.forEach((uri, idx) => {
+            if (idx !== 0 && (idx % 100 === 0 || idx === playlistPlan.trackUris.length - 1)) {
+                spotifyApi.addTracksToPlaylist(playlistResponse.id, playlistPlan.trackUris.slice(lastIdx, idx));
                 lastIdx = idx;
             }
         });
@@ -51,7 +47,7 @@ const PlaylistPreviewScreen: React.FC<ChildComponentProps> = ({ location }) => {
 
     return (
         <React.Fragment>
-            <PlaylistPreview playlistData={location.state.playlistPlan} onPlaylistCreate={createPlaylist}/>
+            <PlaylistPreview playlistData={playlistPlan} onPlaylistCreate={createPlaylist}/>
             {error ? <Error>{error}</Error> : ''}
         </React.Fragment>
     )

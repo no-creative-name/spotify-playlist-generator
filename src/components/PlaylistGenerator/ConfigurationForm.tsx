@@ -2,6 +2,11 @@ import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent }
 import styled from 'styled-components';
 import { Button } from '../basic/Button';
 import { Box } from '../basic/Box';
+import { PlaylistParameters } from '../../interfaces/PlaylistParameters';
+import { PlaylistConfigurationParameters } from '../../interfaces/PlaylistConfigurationParameters';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../interfaces/RootState';
+import { setPlaylistConfigurationParameters } from '../../actions';
 
 const Label = styled.label`
     font-size: 16px;
@@ -27,33 +32,26 @@ const Input = styled.input`
 `;
 
 interface ChildComponentProps {
-    onSubmitForm: ({ }: PlaylistFormData) => void;
+    onSubmitForm: ({ }: PlaylistParameters) => void;
 }
 
-export interface PlaylistFormData {
-    playlistName: string;
-    startYear?: number;
-    endYear?: number;
-    startBpm?: number;
-    endBpm?: number;
-    danceability?: number;
-    energy?: number;
-    numberOfTracks: number;
-}
+const ConfigurationForm: React.FC<ChildComponentProps> = ({
+    onSubmitForm }) => {
+    const playlistConfigurationParameters = useSelector<RootState, PlaylistConfigurationParameters>(state => state.playlistConfigurationParameters);
+    const dispatch = useDispatch();
 
-const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
-    const [numberOfTracks, setNumberOfTracks] = useState(1000);
-    const [playlistName, setPlaylistName] = useState("New Playlist");
-    const [yearToggle, setYearToggle] = useState(false);
-    const [startYear, setStartYear] = useState(1960);
-    const [endYear, setEndYear] = useState(2020);
-    const [bpmToggle, setBpmToggle] = useState(false);
-    const [startBpm, setStartBpm] = useState(80);
-    const [endBpm, setEndBpm] = useState(120);
-    const [danceabilityToggle, setDanceabilityToggle] = useState(false);
-    const [danceability, setDanceability] = useState(0.5);
-    const [energyToggle, setEnergyToggle] = useState(false);
-    const [energy, setEnergy] = useState(0.5);
+    const [numberOfTracks, setNumberOfTracks] = useState(playlistConfigurationParameters.numberOfTracks);
+    const [playlistName, setPlaylistName] = useState(playlistConfigurationParameters.playlistName);
+    const [yearToggle, setYearToggle] = useState(playlistConfigurationParameters.yearToggle);
+    const [startYear, setStartYear] = useState(playlistConfigurationParameters.startYear);
+    const [endYear, setEndYear] = useState(playlistConfigurationParameters.endYear);
+    const [bpmToggle, setBpmToggle] = useState(playlistConfigurationParameters.bpmToggle);
+    const [startBpm, setStartBpm] = useState(playlistConfigurationParameters.startBpm);
+    const [endBpm, setEndBpm] = useState(playlistConfigurationParameters.endBpm);
+    const [danceabilityToggle, setDanceabilityToggle] = useState(playlistConfigurationParameters.danceabilityToggle);
+    const [danceability, setDanceability] = useState(playlistConfigurationParameters.danceability);
+    const [energyToggle, setEnergyToggle] = useState(playlistConfigurationParameters.energyToggle);
+    const [energy, setEnergy] = useState(playlistConfigurationParameters.energy);
 
     const onPlaylistNameInput = useCallback(({ target }) => {
         setPlaylistName(target.value);
@@ -61,30 +59,30 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
 
     const onStartBpmInput = useCallback(({ target }) => {
         setStartBpm(target.value);
-        if(endBpm < target.value) {
+        if (endBpm < target.value) {
             setEndBpm(target.value);
         }
     }, [endBpm]);
 
     const onEndBpmInput = useCallback(({ target }) => {
         setEndBpm(target.value);
-        if(startBpm > target.value) {
+        if (startBpm > target.value) {
             //setStartBpm(target.value);
         }
     }, [startBpm]);
 
     const onStartYearInput = useCallback(({ target }) => {
         setStartYear(target.value);
-        
-        if(target.value.length === 4 && endYear < target.value) {
+
+        if (target.value.length === 4 && endYear < target.value) {
             setEndYear(target.value);
         }
     }, [endYear]);
 
     const onEndYearInput = useCallback(({ target }) => {
         setEndYear(target.value);
-        
-        if(target.value.length === 4 && startYear > target.value) {
+
+        if (target.value.length === 4 && startYear > target.value) {
             setStartYear(target.value);
         }
     }, [startYear]);
@@ -108,16 +106,30 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({ onSubmitForm }) => {
     const onYearToggle = useCallback(({ target }) => {
         setYearToggle(target.checked);
     }, []);
-    
+
     const onDanceabilityToggle = useCallback(({ target }) => {
         setDanceabilityToggle(target.checked);
     }, []);
-    
+
     const onEnergyToggle = useCallback(({ target }) => {
         setEnergyToggle(target.checked);
     }, []);
 
     const onButtonClick = () => {
+        dispatch(setPlaylistConfigurationParameters({
+            playlistName,
+            startYear,
+            endYear,
+            startBpm,
+            endBpm,
+            danceability,
+            energy,
+            yearToggle,
+            bpmToggle,
+            danceabilityToggle,
+            energyToggle,
+            numberOfTracks
+        }))
         onSubmitForm({
             playlistName,
             startBpm: bpmToggle ? startBpm : undefined,

@@ -1,4 +1,4 @@
-import { PlaylistPlan } from '../PlaylistGenerator';
+import { PlaylistPlan } from '../../interfaces/PlaylistPlan';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from '../basic/Button';

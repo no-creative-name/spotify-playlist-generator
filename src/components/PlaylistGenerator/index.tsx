@@ -2,9 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
-import ConfigurationForm, { PlaylistFormData } from './ConfigurationForm';
+import ConfigurationForm from './ConfigurationForm';
 import { LoadingSpinner } from '../basic/LoadingSpinner';
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { setPlaylistPlan, setAccessToken, setPlaylistConfigurationParameters } from '../../actions/index';
+import { PlaylistParameters } from '../../interfaces/PlaylistParameters';
+import { RootState } from '../../interfaces/RootState';
+import { ExtendedTrackObject } from '../../interfaces/ExtendedTrackObject';
 
 const Error = styled.div`
     color: red;
@@ -12,35 +17,23 @@ const Error = styled.div`
     font-weight: 600;
 `
 
-export interface ExtendedTrackObject {
-    audioFeatures: SpotifyApi.AudioFeaturesResponse;
-    track: SpotifyApi.TrackObjectFull;
-}
-
-export interface PlaylistPlan {
-    name: string;
-    trackUris: string[];
-    trackInfos: ExtendedTrackObject[];
-}
-
 const PlaylistGenerator: React.FC = () => {
+    const accessToken = useSelector<RootState, string>(state => state.accessToken);
+    const dispatch = useDispatch();
     const [spotifyApi, setSpotifyApi] = useState<SpotifyWebApi.SpotifyWebApiJs>(new SpotifyWebApi());
     const [error, setError] = useState('');
-    const [playlistPlan, setPlaylistPlan] = useState<PlaylistPlan>({
-        name: '',
-        trackUris: [],
-        trackInfos: [],
-    });
     const [loading, setLoading] = useState(false);
     const history = useHistory();
 
     useEffect(() => {
-        const accessToken = window.location.hash.substr(1);
-
-        setSpotifyApi(getSpotifyApi(accessToken));
+        if(!accessToken) {
+            dispatch(setAccessToken(window.location.hash.substr(1)));
+        }
+        
+        setSpotifyApi(getSpotifyApi(window.location.hash.substr(1)));
     }, []);
 
-    const getFilteredTracks = async (playlistFormData: PlaylistFormData) => {
+    const getFilteredTracks = async (playlistFormData: PlaylistParameters) => {
         setLoading(true);
         const limitPerFetch = 50;
         const numberOfFetches = playlistFormData.numberOfTracks / limitPerFetch;
@@ -90,23 +83,12 @@ const PlaylistGenerator: React.FC = () => {
 
             if (filteredTracks.length > 0) {
                 setError('');
-                setPlaylistPlan({
+                dispatch(setPlaylistPlan({
                     name: playlistFormData.playlistName,
                     trackInfos: filteredTracks,
                     trackUris: filteredTracks.map(t => t.track.uri)
-                });
-                
-                history.push({
-                    pathname: `/preview`,
-                    state: {
-                        playlistPlan: {
-                            name: playlistFormData.playlistName,
-                            trackInfos: filteredTracks,
-                            trackUris: filteredTracks.map(t => t.track.uri)
-                        },
-                        accessToken: window.location.hash.substr(1)
-                    }
-                });
+                }));
+                history.push('/preview');
                 
             } else {
                 setLoading(false);
