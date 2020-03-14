@@ -12,12 +12,6 @@ import { PlaylistParameters } from '../../interfaces/PlaylistParameters';
 import { RootState } from '../../interfaces/RootState';
 import { ExtendedTrackObject } from '../../interfaces/ExtendedTrackObject';
 
-const Error = styled.div`
-    color: red;
-    margin: 50px 0;
-    font-weight: 600;
-`
-
 const PlaylistGenerator: React.FC = () => {
     const accessToken = useSelector<RootState, string>(state => state.accessToken);
     const dispatch = useDispatch();
