@@ -27,7 +27,7 @@ const Artist = styled.p`
 `;
 
 const Title = styled.p`
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     margin: 5px 0 0 0;
 `;
@@ -49,7 +49,7 @@ const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlayli
 
     const onCreateClick = () => {
         onPlaylistCreate();
-        setNotification(`Great! Your playlist ${playlistData.name} has been created. Check it out in your Spotify client! 🥳`)
+        history.push('/success');
     }
 
     const onRedoClick = () => {
@@ -70,7 +70,7 @@ const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlayli
                 notification ? (<div>{notification}</div>) : (
                     <React.Fragment>
                         <h2>{playlistData.name}</h2>
-                        <p>Number of tracks: {playlistData.trackUris.length}</p>
+                        <h3>Number of tracks: {playlistData.trackUris.length}</h3>
                         <List>
                             {shuffleArray(playlistData.trackInfos).map((t, idx) => {
                                 if (idx <= NUMBER_OF_PREVIEW_TRACKS) {

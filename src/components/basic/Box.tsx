@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 export const Box = styled.div`
     width: 100%;
-    height: fit-content;
+    height: 100%;
     padding: 20px;
     border-radius: 5px;
-    background-color: lightgreen;
+    background-color: #4BD05F;
     margin: 10px;
 `;

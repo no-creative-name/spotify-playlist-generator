@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
 import ConfigurationForm from './ConfigurationForm';

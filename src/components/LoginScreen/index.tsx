@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from '../basic/Button';
-import { CenterBox } from '../basic/CenterBox';
+import { Box } from '../basic/Box';
 
 const LoginScreen: React.FC = () => {
     return (
-        <CenterBox>
+        <Box>
             <h1>Hi there!</h1>
             <h2>Welcome to listify!</h2>
             <p>listify allows you to create Spotify playlists based on different parameters.</p>
@@ -12,7 +12,7 @@ const LoginScreen: React.FC = () => {
             <a href="http://localhost:8888/login">
                 <Button>Login to Spotify</Button>
             </a>
-        </CenterBox>
+        </Box>
     )
 }
 

@@ -4,6 +4,7 @@ import './App.css';
 import PlaylistGenerator from './components/PlaylistGenerator';
 import LoginScreen from './components/LoginScreen';
 import PlaylistPreviewScreen from './components/PlaylistPreview/';
+import SuccessScreen from './components/SuccessScreen/';
 import { Container } from './components/basic/Container';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route exact path="/login" component={LoginScreen} />
           <Route exact path="/generate" component={PlaylistGenerator} />
           <Route exact path="/preview" component={PlaylistPreviewScreen} />
+          <Route exact path="/success" component={SuccessScreen} />
           <Route exact path="/" render={redirect} />
         </Container>
       </ConnectedRouter>

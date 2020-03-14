@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { Button } from '../basic/Button';
+import { Button, SmallButton } from '../basic/Button';
 import { Box } from '../basic/Box';
 import { PlaylistParameters } from '../../interfaces/PlaylistParameters';
 import { PlaylistConfigurationParameters } from '../../interfaces/PlaylistConfigurationParameters';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../interfaces/RootState';
 import { setPlaylistConfigurationParameters } from '../../actions';
+import './styles.css';
 
 const Label = styled.label`
     font-size: 16px;
@@ -17,11 +18,8 @@ const FormSet = styled.div`
     flex-direction: column;
     width: 100%;
     transition: opacity 0.3s;
+    margin: 20px 0;
 `;
-
-const Checkbox = styled.input`
-    transform: translate(-20px, 20px);
-`
 
 const Input = styled.input`
     margin: 5px 0 15px 0;
@@ -99,20 +97,20 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
         setEnergy(target.value);
     }, []);
 
-    const onBpmToggle = useCallback(({ target }) => {
-        setBpmToggle(target.checked);
+    const onBpmToggle = useCallback((bool) => {
+        setBpmToggle(bool);
     }, []);
 
-    const onYearToggle = useCallback(({ target }) => {
-        setYearToggle(target.checked);
+    const onYearToggle = useCallback((bool) => {
+        setYearToggle(bool);
     }, []);
 
-    const onDanceabilityToggle = useCallback(({ target }) => {
-        setDanceabilityToggle(target.checked);
+    const onDanceabilityToggle = useCallback((bool) => {
+        setDanceabilityToggle(bool);
     }, []);
 
-    const onEnergyToggle = useCallback(({ target }) => {
-        setEnergyToggle(target.checked);
+    const onEnergyToggle = useCallback((bool) => {
+        setEnergyToggle(bool);
     }, []);
 
     const onButtonClick = () => {
@@ -148,32 +146,30 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
             <FormSet>
                 <Label htmlFor="playlistName">Name of playlist</Label>
                 <Input autoFocus name="playlistName" type="text" value={playlistName} onChange={onPlaylistNameInput}></Input>
-            </FormSet>
-            <FormSet>
                 <Label htmlFor="numberOfTemplateTracks">Number of template tracks</Label>
                 <Input name="numberOfTemplateTracks" type="number" value={numberOfTracks} onChange={onNumberInput}></Input>
             </FormSet>
-            <FormSet className={bpmToggle ? '' : 'disabled'}>
-                <Checkbox type="checkbox" checked={bpmToggle} onChange={onBpmToggle}></Checkbox>
+            <FormSet className={bpmToggle ? '' : 'disabled'} onClick={!bpmToggle ? () => onBpmToggle(true) : () => {}}>
+                {bpmToggle ? (<SmallButton className="disableParameterButton" onClick={() => onBpmToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 <Label htmlFor="startBpm">BPM Range Start</Label>
                 <Input disabled={!bpmToggle} name="startBpm" type="number" value={startBpm} onChange={onStartBpmInput}></Input>
                 <Label htmlFor="endBpm">BPM Range End</Label>
                 <Input disabled={!bpmToggle} name="endBpm" type="number" value={endBpm} onChange={onEndBpmInput}></Input>
             </FormSet>
-            <FormSet className={yearToggle ? '' : 'disabled'}>
-                <Checkbox type="checkbox" checked={yearToggle} onChange={onYearToggle}></Checkbox>
+            <FormSet className={yearToggle ? '' : 'disabled'} onClick={!yearToggle ? () => onYearToggle(true) : () => {}}>
+                {yearToggle ? (<SmallButton className="disableParameterButton" onClick={() => onYearToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 <Label htmlFor="startYear">Release period (start year)</Label>
                 <Input disabled={!yearToggle} name="startYear" type="number" value={startYear} onChange={onStartYearInput}></Input>
                 <Label htmlFor="endYear">Release period (end year)</Label>
                 <Input disabled={!yearToggle} name="endYear" type="number" value={endYear} onChange={onEndYearInput}></Input>
             </FormSet>
-            <FormSet className={danceabilityToggle ? '' : 'disabled'}>
-                <Checkbox type="checkbox" checked={danceabilityToggle} onChange={onDanceabilityToggle}></Checkbox>
+            <FormSet className={danceabilityToggle ? '' : 'disabled'} onClick={!danceabilityToggle ? () => onDanceabilityToggle(true) : () => {}}>
+                {danceabilityToggle ? (<SmallButton className="disableParameterButton" onClick={() => onDanceabilityToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 <Label htmlFor="danceability">Danceability</Label>
                 <Input disabled={!danceabilityToggle} name="danceability" type="range" value={danceability} onChange={onDanceabilityInput}></Input>
             </FormSet>
-            <FormSet className={energyToggle ? '' : 'disabled'}>
-                <Checkbox type="checkbox" checked={energyToggle} onChange={onEnergyToggle}></Checkbox>
+            <FormSet className={energyToggle ? '' : 'disabled'} onClick={!energyToggle ? () => onEnergyToggle(true) : () => {}}>
+                {energyToggle ? (<SmallButton className="disableParameterButton" onClick={() => onEnergyToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 <Label htmlFor="energy">Energy</Label>
                 <Input disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></Input>
             </FormSet>

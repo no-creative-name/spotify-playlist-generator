@@ -8,12 +8,6 @@ import PlaylistPreview from './PlaylistPreview';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../interfaces/RootState';
 
-const Error = styled.div`
-    color: red;
-    margin: 50px 0;
-    font-weight: 600;
-`;
-
 export interface PlaylistPlan {
     name: string;
     trackUris: string[];

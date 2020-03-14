@@ -1,0 +1,16 @@
+.disabled {
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+.disabled > * {
+    cursor: inherit;
+}
+
+.disabled:hover {
+    opacity: 0.8;
+}
+
+.disableParameterButton {
+    margin: 20px 0 10px 0;
+}
