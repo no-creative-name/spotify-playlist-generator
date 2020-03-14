@@ -69,8 +69,8 @@ const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlayli
             {
                 notification ? (<div>{notification}</div>) : (
                     <React.Fragment>
-                        <h2>{playlistData.name}</h2>
-                        <h3>Number of tracks: {playlistData.trackUris.length}</h3>
+                        <h1>{playlistData.name}</h1>
+                        <h2>{playlistData.trackUris.length} tracks</h2>
                         <List>
                             {shuffleArray(playlistData.trackInfos).map((t, idx) => {
                                 if (idx <= NUMBER_OF_PREVIEW_TRACKS) {
