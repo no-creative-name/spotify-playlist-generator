@@ -20,5 +20,6 @@ export const initialStore = {
       name: '',
       trackUris: [],
       trackInfos: []
-    }
+    },
+    playlistId: ''
   };

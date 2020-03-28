@@ -5,4 +5,5 @@ export interface RootState {
     accessToken: string;
     playlistConfigurationParameters: PlaylistConfigurationParameters;
     playlistPlan: PlaylistPlan;
+    playlistId: string;
 }

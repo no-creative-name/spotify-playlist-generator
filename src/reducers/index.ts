@@ -1,4 +1,4 @@
-import { SET_ACCESS_TOKEN, SET_PLAYLIST_CONFIGURATION_PARAMETERS, SET_PLAYLIST_PLAN } from '../actions';
+import { SET_ACCESS_TOKEN, SET_PLAYLIST_CONFIGURATION_PARAMETERS, SET_PLAYLIST_PLAN, SET_PLAYLIST_ID } from '../actions';
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { History as ExtendedHistory } from 'history';
@@ -30,6 +30,15 @@ export const playlistPlan = (state = {}, action: any) => {
     }
 }
 
-const createRootReducer = (history: ExtendedHistory) => combineReducers({ router: connectRouter(history), accessToken, playlistConfigurationParameters, playlistPlan });
+export const playlistId = (state = {}, action: any) => {
+    switch (action.type) {
+        case SET_PLAYLIST_ID:
+            return action.playlistId;
+        default:
+            return state;
+    }
+}
+
+const createRootReducer = (history: ExtendedHistory) => combineReducers({ router: connectRouter(history), accessToken, playlistConfigurationParameters, playlistPlan, playlistId });
 
 export default createRootReducer;

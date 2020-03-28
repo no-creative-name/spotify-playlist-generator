@@ -4,6 +4,7 @@ import { PlaylistPlan } from '../interfaces/PlaylistPlan';
 export const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
 export const SET_PLAYLIST_CONFIGURATION_PARAMETERS = 'SET_PLAYLIST_CONFIGURATION_PARAMETERS';
 export const SET_PLAYLIST_PLAN = 'SET_PLAYLIST_PLAN';
+export const SET_PLAYLIST_ID = 'SET_PLAYLIST_ID';
 
 export const setAccessToken = (accessToken: string) => {
     return { type: SET_ACCESS_TOKEN, accessToken};
@@ -13,4 +14,8 @@ export const setPlaylistConfigurationParameters = (playlistConfigurationParamete
 }
 export const setPlaylistPlan = (playlistPlan: PlaylistPlan) => {
     return { type: SET_PLAYLIST_PLAN, playlistPlan};
+}
+
+export const setPlaylistId = (playlistId: string) => {
+    return { type: SET_PLAYLIST_ID, playlistId};
 }

@@ -7,4 +7,5 @@ export const Box = styled.div`
     border-radius: 5px;
     background-color: #4BD05F;
     margin: 10px;
+    box-shadow: 5px 5px 10px grey;
 `;

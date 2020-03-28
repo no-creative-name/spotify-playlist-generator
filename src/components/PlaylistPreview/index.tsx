@@ -5,8 +5,9 @@ import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
 import { ExtendedTrackObject } from '../../interfaces/ExtendedTrackObject';
 import PlaylistPreview from './PlaylistPreview';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../interfaces/RootState';
+import { setPlaylistId } from '../../actions';
 
 export interface PlaylistPlan {
     name: string;
@@ -17,6 +18,7 @@ export interface PlaylistPlan {
 const PlaylistPreviewScreen: React.FC = () => {
     const playlistPlan = useSelector<RootState, PlaylistPlan>(state => state.playlistPlan);
     const accessToken = useSelector<RootState, string>(state => state.accessToken);
+    const dispatch = useDispatch();
     const [spotifyApi, setSpotifyApi] = useState<SpotifyWebApi.SpotifyWebApiJs>(new SpotifyWebApi());
 
     useEffect(() => {
@@ -28,6 +30,7 @@ const PlaylistPreviewScreen: React.FC = () => {
         const playlistResponse = await spotifyApi.createPlaylist(me.id, {
             name: playlistPlan.name,
         });
+        dispatch(setPlaylistId(playlistResponse.id));
         let lastIdx = 0;
         playlistPlan.trackUris.forEach((uri, idx) => {
             if (idx !== 0 && (idx % 100 === 0 || idx === playlistPlan.trackUris.length - 1)) {
