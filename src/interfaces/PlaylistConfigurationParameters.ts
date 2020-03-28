@@ -7,10 +7,10 @@ export interface PlaylistConfigurationParameters {
     startBpm: number;
     endBpm: number;
     danceabilityToggle: boolean;
-    danceability: number;
+    danceability: number[];
     energyToggle: boolean;
-    energy: number;
+    energy: number[];
     valenceToggle: boolean;
-    valence: number;
+    valence: number[];
     numberOfTracks: number;
 }

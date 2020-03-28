@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getSpotifyApi } from '../../connectors/SpotifyAPIConnector';
 import SpotifyWebApi from "spotify-web-api-js";
 import ConfigurationForm from './ConfigurationForm';
@@ -6,7 +6,7 @@ import { LoadingSpinner } from '../basic/LoadingSpinner';
 import { Popup } from '../basic/Popup';
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { setPlaylistPlan, setAccessToken, setPlaylistConfigurationParameters } from '../../actions/index';
+import { setPlaylistPlan, setAccessToken } from '../../actions/index';
 import { PlaylistParameters } from '../../interfaces/PlaylistParameters';
 import { RootState } from '../../interfaces/RootState';
 import { ExtendedTrackObject } from '../../interfaces/ExtendedTrackObject';
@@ -108,15 +108,7 @@ const PlaylistGenerator: React.FC = () => {
 
     const filterTracks = (
         tracks: ExtendedTrackObject[],
-        filters: {
-            startYear?: number,
-            endYear?: number,
-            startBpm?: number,
-            endBpm?: number,
-            danceability?: number,
-            energy?: number,
-            valence?: number,
-        }
+        filters: PlaylistParameters
     ) => tracks.filter(t => {
         const releaseDate = (t.track.album as SpotifyApi.AlbumObjectFull)['release_date'];
         const releaseYear = Number(releaseDate.substr(0, 4));
@@ -129,9 +121,12 @@ const PlaylistGenerator: React.FC = () => {
             releaseYear <= (filters.endYear || 10000) &&
             bpm >= (filters.startBpm || 0) &&
             bpm <= (filters.endBpm || 10000) &&
-            danceability >= (filters.danceability || 0.0) &&
-            energy >= (filters.energy || 0.0) &&
-            valence >= (filters.valence || 0.0);
+            danceability >= (filters.danceability ? filters.danceability[0] : 0.0) &&
+            danceability <= (filters.danceability ? filters.danceability[1] : 1.0) &&
+            energy >= (filters.energy ? filters.energy[0] : 0.0) &&
+            energy <= (filters.energy ? filters.energy[0] : 1.0) &&
+            valence >= (filters.valence ? filters.valence[0] : 0.0) &&
+            valence <= (filters.valence ? filters.valence[1] : 1.0)
     });
 
     return (

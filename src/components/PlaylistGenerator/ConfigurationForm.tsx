@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent } from 'react';
+import React, { useState, useEffect, useCallback, EventHandler, SyntheticEvent, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { Button, SmallButton } from '../basic/Button';
 import { ContentContainer } from '../basic/ContentContainer';
@@ -8,6 +8,8 @@ import { PlaylistConfigurationParameters } from '../../interfaces/PlaylistConfig
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../interfaces/RootState';
 import { setPlaylistConfigurationParameters } from '../../actions';
+import Slider from '@material-ui/core/Slider';
+import { makeStyles } from '@material-ui/core/styles';
 import './styles.css';
 
 const Label = styled.label`
@@ -27,7 +29,7 @@ const FormSet = styled.div`
 const InputSet = styled.div`
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
     cursor: pointer;
 `
 
@@ -37,13 +39,6 @@ const Input = styled.input`
     border: none;
     padding: 15px;
     margin: 5px 0 15px 0px;
-`;
-
-const SliderInput = styled.input`
-    font-size: 18px;
-    border-radius: 5px;
-    border: none;
-    padding: 15px;
 `;
 
 interface ChildComponentProps {
@@ -112,16 +107,16 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
         setNumberOfTracks(target.value);
     }, []);
 
-    const onDanceabilityInput = useCallback(({ target }) => {
-        setDanceability(target.value);
+    const onDanceabilityInput = useCallback((event: ChangeEvent<{}>, newValue: number | number[]) => {
+        setDanceability((newValue as number[]));
     }, []);
 
-    const onEnergyInput = useCallback(({ target }) => {
-        setEnergy(target.value);
+    const onEnergyInput = useCallback((event: ChangeEvent<{}>, newValue: number | number[]) => {
+        setEnergy((newValue as number[]));
     }, []);
 
-    const onValenceInput = useCallback(({ target }) => {
-        setValence(target.value);
+    const onValenceInput = useCallback((event: ChangeEvent<{}>, newValue: number | number[]) => {
+        setValence((newValue as number[]));
     }, []);
 
     const onBpmToggle = useCallback((bool) => {
@@ -168,9 +163,9 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
             startYear: yearToggle ? Number(startYear) : undefined,
             endYear: yearToggle ? Number(endYear) : undefined,
             numberOfTracks,
-            danceability: danceabilityToggle ? danceability / 100 : undefined,
-            energy: energyToggle ? energy / 100 : undefined,
-            valence: valenceToggle ? valence / 100 : undefined,
+            danceability: danceabilityToggle ? danceability.map(d => d / 100.0) : undefined,
+            energy: energyToggle ? energy.map(e => e / 100.0) : undefined,
+            valence: valenceToggle ? valence.map(v => v / 100.0) : undefined,
         })
     }
 
@@ -208,17 +203,17 @@ const ConfigurationForm: React.FC<ChildComponentProps> = ({
                 </FormSet>
                 <InputSet className={danceabilityToggle ? '' : 'disabled'} onClick={!danceabilityToggle ? () => onDanceabilityToggle(true) : () => { }}>
                     <Label htmlFor="danceability">Danceability</Label>
-                    <SliderInput disabled={!danceabilityToggle} name="danceability" type="range" value={danceability} onChange={onDanceabilityInput}></SliderInput>
+                    <Slider disabled={!danceabilityToggle} name="danceability" value={danceability} onChange={onDanceabilityInput}></Slider>
                     {danceabilityToggle ? (<SmallButton className="disableParameterButton" onClick={() => onDanceabilityToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 </InputSet>
                 <InputSet className={energyToggle ? '' : 'disabled'} onClick={!energyToggle ? () => onEnergyToggle(true) : () => { }}>
                     <Label htmlFor="energy">Energy</Label>
-                    <SliderInput disabled={!energyToggle} name="energy" type="range" value={energy} onChange={onEnergyInput}></SliderInput>
+                    <Slider disabled={!energyToggle} name="energy" value={energy} onChange={onEnergyInput}></Slider>
                     {energyToggle ? (<SmallButton className="disableParameterButton" onClick={() => onEnergyToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 </InputSet>
                 <InputSet className={valenceToggle ? '' : 'disabled'} onClick={!valenceToggle ? () => onValenceToggle(true) : () => { }}>
                     <Label htmlFor="valence">Valence</Label>
-                    <SliderInput disabled={!valenceToggle} name="valence" type="range" value={valence} onChange={onValenceInput}></SliderInput>
+                    <Slider disabled={!valenceToggle} name="valence" value={valence} onChange={onValenceInput}></Slider>
                     {valenceToggle ? (<SmallButton className="disableParameterButton" onClick={() => onValenceToggle(false)}>Disable Parameter</SmallButton>) : ''}
                 </InputSet>
                 <Button onClick={onButtonClick}>Get Playlist</Button>

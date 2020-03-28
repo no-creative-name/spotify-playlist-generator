@@ -4,8 +4,8 @@ export interface PlaylistParameters {
     endYear?: number;
     startBpm?: number;
     endBpm?: number;
-    danceability?: number;
-    energy?: number;
-    valence?: number;
+    danceability?: number[];
+    energy?: number[];
+    valence?: number[];
     numberOfTracks: number;
 }
