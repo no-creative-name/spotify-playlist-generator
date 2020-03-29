@@ -43,9 +43,8 @@ const LoginScreen: React.FC = () => {
             <ContentContainer>
                 <p>listify allows you to create Spotify playlists based on different parameters.</p>
                 <p>It browses your "Liked Songs" for the ones that fit your filters.</p>
-                <p>To start, connect listify to your Spotify account:</p>
             </ContentContainer>
-            <Button onClick={() => authenticateSpotifyAPI()}>authenticate</Button>
+            <Button onClick={() => authenticateSpotifyAPI()}>Start</Button>
         </Box>
     )
 }
