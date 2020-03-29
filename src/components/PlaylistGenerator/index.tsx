@@ -20,11 +20,11 @@ const PlaylistGenerator: React.FC = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (!accessToken) {
-            dispatch(setAccessToken(window.location.hash.substr(1)));
+        if(!accessToken) {
+            history.push('login');
+        } else {
+            setSpotifyApi(getSpotifyApi(accessToken));
         }
-
-        setSpotifyApi(getSpotifyApi(window.location.hash.substr(1)));
     }, []);
 
     const getFilteredTracks = async (playlistFormData: PlaylistParameters) => {

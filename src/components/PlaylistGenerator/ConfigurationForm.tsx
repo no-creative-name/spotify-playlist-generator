@@ -19,11 +19,12 @@ const Label = styled.label`
 
 const FormSet = styled.div`
     display: grid;
-    grid-template-columns: 48% 48%;
-    justify-content: space-between;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 10px;
     width: 100%;
+    max-width: 100%;
     transition: opacity 0.3s;
-    margin: 20px 0;
+    margin: 10px 0;
 `;
 
 const InputSet = styled.div`
@@ -31,6 +32,7 @@ const InputSet = styled.div`
     flex-direction: column;
     overflow: visible;
     cursor: pointer;
+    margin: 20px 0;
 `
 
 const Input = styled.input`
