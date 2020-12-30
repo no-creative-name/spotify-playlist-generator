@@ -92,7 +92,7 @@ const PlaylistPreview: React.FC<ChildComponentProps> = ({ playlistData, onPlayli
                                 }
                             })}
                         </List>
-                        <Button onClick={onCreateClick}>Create Playlist</Button>
+                        <Button onClick={onCreateClick}>Save Playlist</Button>
                         <Button onClick={onRedoClick}>Readjust Parameters</Button>
                     </React.Fragment>
                )
